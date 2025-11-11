@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PDF結合ツール</title>
+<title>リスさんPDF結合ツール</title>
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 <style>
   body {
@@ -37,9 +37,9 @@
 </style>
 </head>
 <body>
-  <h1>📎 PDF結合ツール</h1>
+  <h1>📎 リスさんPDF結合ツール</h1>
   <input type="file" id="pdfInput" multiple accept=".pdf">
-  <button onclick="mergePDFs()">結合してダウンロード</button>
+  <button onclick="mergePDFs()">結合してダウンロードするにゃん</button>
   <div id="log"></div>
 
 <script>
@@ -49,11 +49,11 @@ async function mergePDFs() {
   const files = fileInput.files;
 
   if (!files.length) {
-    log.textContent = "⚠️ PDFファイルを選択してください。";
+    log.textContent = "⚠️ PDFファイルを選択してくださいにゃん。";
     return;
   }
 
-  log.textContent = "⏳ 結合中...";
+  log.textContent = "⏳ 結合中...にゃん";
 
   const mergedPdf = await PDFLib.PDFDocument.create();
 
@@ -76,8 +76,9 @@ async function mergePDFs() {
   a.click();
   URL.revokeObjectURL(url);
 
-  log.textContent = "✅ 結合完了！merged.pdf をダウンロードしました。";
+  log.textContent = "✅ 結合完了！merged.pdf をダウンロードしましたにゃん。";
 }
 </script>
 </body>
 </html>
+
