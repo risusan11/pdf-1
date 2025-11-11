@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF結合ツール</title>
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f7f9fb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+  }
+  h1 { color: #333; }
+  input[type=file] {
+    margin: 20px;
+  }
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #2980b9;
+  }
+  #log {
+    margin-top: 20px;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+  <h1>📎 PDF結合ツール</h1>
+  <input type="file" id="pdfInput" multiple accept=".pdf">
+  <button onclick="mergePDFs()">結合してダウンロード</button>
+  <div id="log"></div>
+
+<script>
+async function mergePDFs() {
+  const fileInput = document.getElementById('pdfInput');
+  const log = document.getElementById('log');
+  const files = fileInput.files;
+
+  if (!files.length) {
+    log.textContent = "⚠️ PDFファイルを選択してください。";
+    return;
+  }
+
+  log.textContent = "⏳ 結合中...";
+
+  const mergedPdf = await PDFLib.PDFDocument.create();
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+    copiedPages.forEach(page => mergedPdf.addPage(page));
+  }
+
+  const mergedBytes = await mergedPdf.save();
+
+  // ダウンロードリンク生成
+  const blob = new Blob([mergedBytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "merged.pdf";
+  a.click();
+  URL.revokeObjectURL(url);
+
+  log.textContent = "✅ 結合完了！merged.pdf をダウンロードしました。";
+}
+</script>
+</body>
+</html>
